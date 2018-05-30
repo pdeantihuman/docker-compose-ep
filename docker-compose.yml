@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+    web:
+        image: nginx:1
+        ports:
+            - "8080:80"
+        volumes:
+            - ./www:/var/www
+            - ./conf.d:/etc/nginx/conf.d
+            - ./log:/var/log/nginx
+            - "phpsocket:/var/run"
+        networks:
+            - code-network
+    php:
+        image: php:fpm
+        volumes:
+            - ./www:/var/www
+            - ./php-fpm.d:/usr/local/etc/php-fpm.d
+            - "phpsocket:/var/run"
+        networks:
+            - code-network
+networks:
+    code-network:
+        driver: bridge
+volumes:
+    phpsocket:
